@@ -1,5 +1,6 @@
 package exerciseLabWork;
 import java.util.Scanner;
+
 public class GoodFan {
 public static void main(String[] args) {
 	Scanner scan=new Scanner(System.in);
@@ -9,60 +10,49 @@ public static void main(String[] args) {
 		System.out.println("Press a key and enter to pull chain...");
 		scan.next();
 		obj.pull();
-	
 	}
+	
+	
 }
 }
 class PrintData{
-	Slow sl=new Slow();
-	Medium m=new Medium();
-	High h=new High();
-	int s=0;
-	
+	Fan state=new SwitchOffState();
 	public void pull() {
-			
-		switch(s)
-		{
-		case 0:
-			System.out.println("switch off state...");
-			break;
-		case 1:
-			sl.pull();
-			
-			break;
-		case 2:
-			m.pull();
-			
-			break;
-		case 3:
-			h.pull();
-			
-			break;
-		default:
-			s=0;
-			System.out.println("switch off state...");
-		}
-		s++;
+		state.pull(this);
+		
+		
 	}
+
+abstract class Fan{
+	public abstract void pull(PrintData fan);
 }
-class Fan{
+class SwitchOffState extends Fan{
+	
+	public void pull(PrintData fan) {
+		System.out.println("switch on state....on");
+		fan.state=new SwitchOnState();
+	}
 	
 }
-class Slow extends Fan{
+class SwitchOnState extends Fan{
 	
-	public void pull() {
-		System.out.println("switch on state....slow");
+	public void pull(PrintData fan) {
+		System.out.println("switch on state....medium");
+		fan.state=new Medium();
 	}
 	
 }
 class Medium extends Fan{
-	public void pull() {
-	System.out.println("medium speed state...medium");
+	public void pull(PrintData fan) {
+	System.out.println("medium speed state...high");
+	fan.state=new High();
 	}
 }
 class High extends Fan{
-	public void pull() {
-		System.out.println("high speed state.....fast");
+	public void pull(PrintData fan) {
+		System.out.println("high speed state.....off");
+		fan.state=new SwitchOffState();
 	}
+		
+}}
 
-}
